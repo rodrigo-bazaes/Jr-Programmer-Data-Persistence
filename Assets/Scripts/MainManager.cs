@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -17,11 +18,14 @@ public class MainManager : MonoBehaviour
     private int m_Points;
     
     private bool m_GameOver = false;
+    [SerializeField] private TextMeshProUGUI bestScoreText;
 
-    
+
     // Start is called before the first frame update
     void Start()
     {
+
+        bestScoreText.text = "Best Score: " + MenuManager.Instance.bestPlayer + ", " + MenuManager.Instance.bestScore;
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
         
@@ -70,7 +74,27 @@ public class MainManager : MonoBehaviour
 
     public void GameOver()
     {
+        UpdateBestScore();
         m_GameOver = true;
         GameOverText.SetActive(true);
+        
+    }
+
+
+    private void UpdateBestScore()
+    {
+        
+        if (m_Points > MenuManager.Instance.bestScore)
+        {
+            MenuManager.Instance.bestPlayer = MenuManager.Instance.currentPlayer;
+            MenuManager.Instance.bestScore = m_Points;
+            
+            
+        }
+    }
+
+    public void GoToMainMenu()
+    {
+        SceneManager.LoadScene(0);
     }
 }
